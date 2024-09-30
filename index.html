@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ETX Dashboard</title>
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+    <style>
+      .test-section,
+      .output-section,
+      .relay-section {
+        background-color: #f0f8ff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+      .section-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 15px;
+      }
+      .control-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #e7f1ff;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+      .control-item-background-white {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+      .control-item i {
+        margin-right: 10px;
+      }
+      .switch {
+        margin-left: auto;
+      }
+      .side-section {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .nav-link:hover {
+        background-color: #6c757d; /* Change this to your preferred hover color */
+        color: white; /* Change the text color */
+    }
+
+    /* Active link highlighting */
+    .nav-link.active {
+        background-color: #007bff; /* Active background color */
+        color: white; /* Active text color */
+    }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+      <div class="container-fluid">
+        <!-- Logo aligned to the left -->
+        <a class="navbar-brand" href="#">ETX</a>
+
+
+<!-- Navigation items (including buttons) -->
+<div class="d-flex align-items-center" id="navbarNavDropdown">
+  <ul class="navbar-nav ms-auto">
+    <!-- Start button -->
+    <li class="nav-item me-2">
+      <button id="startButton" type="button" class="btn btn-success" onclick="handleStart()">Start</button>
+    </li>
+    <!-- Reboot button (hidden initially) -->
+    <li class="nav-item me-2">
+      <button id="rebootButton" type="button" class="btn btn-warning d-none" onclick="handleReboot()">Reboot</button>
+    </li>
+    <!-- Stop button -->
+    <li class="nav-item me-2">
+      <button id="stopButton" type="button" class="btn btn-danger" onclick="handleStop()">Stop</button>
+    </li>
+  </ul>
+</div>
+
+
+
+
+      </div>
+    </nav>
+    
+      
+      <div class="container-fluid d-none" id="contentContainer">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark rounded-end">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb align-items-center align-items-sm-start w-100 pl-4" id="menu">
+                      <li class="nav-item w-100 mb-2 flex-row align-items-center" onclick="changeDisplayToDashboard()">
+                          <a href="#" class="nav-link text-white d-flex align-items-center ps-2 py-1 gap-1" id="dashboardLink">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-gauge"><path d="M15.6 2.7a10 10 0 1 0 5.7 5.7"/><circle cx="12" cy="12" r="2"/><path d="M13.4 10.6 19 5"/></svg>
+                              <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                          </a>
+                      </li>
+                  
+                      <li class="nav-item w-100 mb-2" onclick="changeDisplayToForm()">
+                          <a href="#submenu3" data-bs-toggle="collapse" class="nav-link text-white d-flex align-items-center ps-2 py-1 gap-1" id="formLink">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-input"><path d="M2 9V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1"/><path d="M2 13h10"/><path d="m9 16 3-3-3-3"/></svg>
+                              <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Form</span>
+                          </a>
+                          <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                          </ul>
+                      </li>
+
+                      <li class="nav-item w-100 mb-2" onclick="changeDisplayToDeviceSetup()">
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link text-white d-flex align-items-center ps-2 py-1 gap-1" id="formLink">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cable"><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1"/><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9"/><path d="M21 21v-2h-4"/><path d="M3 5h4V3"/><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"/></svg>
+                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Device Setup</span>
+                        </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                        </ul>
+                    </li>
+
+                      <li class="nav-item w-100 " onclick="changeDisplayToBattryDebug()">
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link text-white d-flex align-items-center ps-2 py-1 gap-1" id="formLink">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-battery-charging"><path d="M15 7h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M6 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1"/><path d="m11 7-3 5h4l-3 5"/><line x1="22" x2="22" y1="11" y2="13"/></svg>
+                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Battery Debug</span>
+                        </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                        </ul>
+                    </li>
+                  </ul>
+                    <hr>
+                    
+                </div>
+            </div>
+            <div class="col py-3">
+               <!-- Dashboard section -->
+                <div class="container my-4" id="liveParametersContainer">
+                    <div class="row" >
+                      <!-- Test Bench Section -->
+                      <div class="test-section col-md">
+                        <div class="section-header text-center">Test Bench</div>
+                        <div class="control-item-background-white">
+                          <span><i class="bi bi-play"></i>▶ Start</span>
+                          <div class="side-section">
+                            <button
+                              id="startStatusButton"
+                              class="btn btn-primary"
+                              onclick="sendCommand('START','startStatusButton')"
+                            >
+                              Test
+                            </button>
+                            <span id="startStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-x"></i>Gear D</span>
+                          <div class="side-section">
+                            <button
+                            id="gearDStatusButton"
+                              class="btn btn-primary"
+                              onclick="sendCommand('DRIVE','gearDStatusButton')"
+                            >
+                              Test
+                            </button>
+                            <span id="gearDStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item-background-white">
+                          <span><i class="bi bi-arrow-repeat"></i>Gear R</span>
+                          <div class="side-section">
+                            <button
+                            id="gearRStatusButton"
+                              class="btn btn-primary"
+                              onclick="sendCommand('REVERSE','gearRStatusButton')"
+                            >
+                              Test
+                            </button>
+                            <span id="gearRStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-circle"></i>Gear N</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="gearNStatusButton" onclick="sendCommand('NUTRAL','gearNStatusButton')">Test</button>
+                            <spa id="gearNStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item-background-white">
+                          <span><i class="bi bi-hand-index-thumb"></i>Handbrake</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="handBrakeStatusButton" onclick="sendCommand('HANDBRAKE','handBrakeStatusButton')">Test</button>
+                            <span id="handBrakeStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-car-front"></i>Brake</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="BrakeStatusButton" onclick="sendCommand('BRAKE','BrakeStatusButton')">Test</button>
+                            <span id="BrakeStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <!-- Output Controls Section -->
+                      <div class="output-section col-md">
+                        <div class="section-header text-center">Output Controls</div>
+                        <div class="control-item-background-white">
+                          <span><i class="bi bi-x"></i> Indicate D</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="indicatorDStatusButton" onclick="sendCommand('CHECK_INDICATOR_D','indicatorDStatusButton')">Test</button>
+                            <span id="indicatorDStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-arrow-repeat"></i> Indicate R</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="indicatorRStatusButton" onclick="sendCommand('CHECK_INDICATOR_R','indicatorRStatusButton')">Test</button>
+                            <span id="indicatorRStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                        <div class="control-item-background-white">
+                          <span><i class="bi bi-circle"></i> Indicate N</span>
+                          <div class="side-section">
+                            <button class="btn btn-primary" id="indicatorNStatusButton" onclick="sendCommand('CHECK_INDICATOR_N','indicatorNStatusButton')">Test</button>
+                            <span id="indicatorNStatusIndicator" class="text-danger">●</span>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <!-- Relay Controls Section -->
+                      <div class="relay-section col-md">
+                        <div class="section-header text-center">Relay Controls</div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> Chill</span>
+                          <div class="form-check form-switch switch">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="switchChill"
+                            />
+                            <label class="form-check-label" for="switchChill">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> IGN</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchIGN" />
+                            <label class="form-check-label" for="switchIGN">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> Rev</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchRev" />
+                            <label class="form-check-label" for="switchRev">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> Emg</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchEmg" />
+                            <label class="form-check-label" for="switchEmg">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> BMS</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchBMS" />
+                            <label class="form-check-label" for="switchBMS">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> Acc</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchAcc" />
+                            <label class="form-check-label" for="switchAcc">Off</label>
+                          </div>
+                        </div>
+                        <div class="control-item">
+                          <span><i class="bi bi-lightning-charge"></i> MC</span>
+                          <div class="form-check form-switch switch">
+                            <input class="form-check-input" type="checkbox" id="switchMC" />
+                            <label class="form-check-label" for="switchMC">Off</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <!-- Form section -->
+                  <div id="formSection" class="d-none">
+                    <form id="DodForm" class="mb-5" >
+                      <div class="">
+                        <h3>DOD: </h3>
+                        <p id="DodValue"></p>
+                      </div>
+                      <div class="mb-3">
+                        <label for="setDOD" class="form-label">Update DOD</label>
+                        <input type="text" class="form-control" id="dodValueInput" aria-describedby="emailHelp">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Change Value</button>
+                    </form>
+                    <form id="VinForm" class="mb-5">
+                      <div class="">
+                        <h3>VIN Number: </h3>
+                        <p id="VinValue"></p>
+                      </div>
+                      <div class="mb-3">
+                        <label for="setVIN" class="form-label">Update Vin</label>
+                        <input type="text" class="form-control" id="vinValueInput" aria-describedby="emailHelp">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Change Value</button>
+                    </form>
+                    <div class="EEPROMResetSection mb-5">
+                      <h3>Reset EEPROM </h3>
+                      <button id="EEPROMResetButton" class="btn btn-primary" onclick="handleEEPROMButtonClick()">Reset EEPROM </button>
+                    </div>
+
+                    
+                  </div>
+                  <!-- Device setup section -->
+                  <div id="deviceSetupSection" class="d-none">
+                    <div class="">
+                      <h3>Device Setup </h3>
+                    </div>
+                    <button type="submit" class="btn btn-primary">BMS</button>
+                    <button type="submit" class="btn btn-primary">BVCU</button>
+                    <button id="myButtonForTest" class="btn btn-primary" onclick="showLoading()">Reset</button>
+                    
+                    <div class="mt-4">
+                      <div class="control-item">
+                        <span><i class="bi bi-lightning-charge"></i> Chiller</span>
+                        <div class="form-check form-switch switch">
+                          <input class="form-check-input" type="checkbox" id="ChillerToggleInDeviceSetup" />
+                        </div>
+                      </div>
+                      <div class="control-item">
+                        <span><i class="bi bi-lightning-charge"></i> Debug Viewer</span>
+                        <div class="form-check form-switch switch">
+                          <input class="form-check-input" type="checkbox" id="debugViewerToggleInDeviceSetup" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Device setup section -->
+                  <div id="batteryDebugSection" class="d-none">
+                    <div class="">
+                      <h3>Battery Debug section </h3>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./js/jquery-3.6.0.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/bootstrap.js"></script>
+  </body>
+</html>
+ 
