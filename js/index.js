@@ -24,6 +24,15 @@ const statusIndicatorForN = document.getElementById(
   `indicatorNStatusIndicator`
 );
 
+// Loggle buttons
+const switchChill = document.getElementById("switchChill");
+const switchIGN = document.getElementById("switchIGN");
+const switchRev = document.getElementById("switchRev");
+const switchEmg = document.getElementById("switchEmg");
+const switchBMS = document.getElementById("switchBMS");
+const switchAcc = document.getElementById("switchAcc");
+const switchMC = document.getElementById("switchMC");
+
 // Side bar navigation
 const formDiv = document.getElementById("formSection");
 const dashbaordDiv = document.getElementById("liveParametersContainer");
@@ -100,6 +109,13 @@ function handleReboot() {
   statusIndicatorForR.classList.add("text-danger");
   statusIndicatorForN.classList.remove("text-success");
   statusIndicatorForN.classList.add("text-danger");
+  switchChill.checked = false;
+  switchIGN.checked = false;
+  switchRev.checked = false;
+  switchEmg.checked = false;
+  switchBMS.checked = false;
+  switchAcc.checked = false;
+  switchMC.checked = false;
   sendCommand("REBOOT_TOTAL_SYSTEM", "");
 }
 
